@@ -1,11 +1,11 @@
-.PHONY: start start-web run
-
-start:
+.PHONY: run
+run:
 	go run cmd/main.go
 
-start-web:
-	cd web && npm run dev
+.PHONY: wire
+wire:
+	wire gen cmd/wire/wire.go
 
-run:
-	make start &
-	make start-web
+.PHONY: orm
+orm:
+	go run cmd/orm/main.go

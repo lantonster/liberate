@@ -7,20 +7,23 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/lantonster/liberate/internal/config"
+	"github.com/lantonster/liberate/internal/handler"
+	"github.com/lantonster/liberate/internal/router"
+	"github.com/lantonster/liberate/internal/service"
 )
 
 type Server struct {
 	srv *http.Server
 }
 
-func NewServer(cfg *config.Config) *Server {
+func NewServer(
+	cfg *config.Config,
+	service *service.Service,
+	handler *handler.Handler,
+) *Server {
 	r := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "Hello, World!",
-		})
-	})
+	router.RegisterRoutes(r, service, handler)
 
 	return &Server{
 		srv: &http.Server{

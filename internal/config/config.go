@@ -9,11 +9,20 @@ import (
 // Config holds the service configuration
 type Config struct {
 	Server Server `mapstructure:"server"`
+	MySQL  MySQL  `mapstructure:"mysql"`
 }
 
 type Server struct {
 	Port int    `mapstructure:"port" default:"8080"`
 	Host string `mapstructure:"host" default:"0.0.0.0"`
+}
+
+type MySQL struct {
+	Host     string `mapstructure:"host" default:"localhost"`
+	Port     int    `mapstructure:"port" default:"3306"`
+	Username string `mapstructure:"username"`
+	Password string `mapstructure:"password"`
+	Database string `mapstructure:"database"`
 }
 
 // LoadConfig loads the configuration from environment variables and config file
