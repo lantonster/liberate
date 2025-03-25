@@ -6,10 +6,13 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/lantonster/liberate/docs/api"
 	"github.com/lantonster/liberate/internal/config"
 	"github.com/lantonster/liberate/internal/handler"
 	"github.com/lantonster/liberate/internal/router"
 	"github.com/lantonster/liberate/internal/service"
+	"github.com/lantonster/liberate/pkg/color"
+	"github.com/lantonster/liberate/pkg/log"
 )
 
 type Server struct {
@@ -17,7 +20,7 @@ type Server struct {
 }
 
 func NewServer(
-	cfg *config.Config,
+	conf *config.Config,
 	service *service.Service,
 	handler *handler.Handler,
 ) *Server {
@@ -25,16 +28,20 @@ func NewServer(
 
 	router.RegisterRoutes(r, service, handler)
 
+	api.SwaggerInfo.Host = fmt.Sprintf("localhost:%d", conf.Server.Port)
+	info := color.Green.Sprintf("API docs: http://localhost:%d/swagger/index.html", conf.Server.Port)
+	defer log.WithContext(context.Background()).Infof(info)
+
 	return &Server{
 		srv: &http.Server{
-			Addr:    fmt.Sprintf("%s:%d", cfg.Server.Host, cfg.Server.Port),
+			Addr:    fmt.Sprintf(":%d", conf.Server.Port),
 			Handler: r,
 		},
 	}
 }
 
 func (s *Server) Start() error {
-	fmt.Printf("Server started at %s\n", s.srv.Addr)
+	log.WithContext(context.Background()).Info(color.Green.Sprintf("Server started at %s", s.srv.Addr))
 	return s.srv.ListenAndServe()
 }
 

@@ -1,10 +1,14 @@
 package service
 
-import "github.com/lantonster/liberate/internal/repository"
+import (
+	"context"
+
+	"github.com/lantonster/liberate/internal/repository"
+)
 
 type UserService interface {
 	// Register registers a new user
-	Register(username, password string) error
+	Register(c context.Context, email, password string) error
 
 	// Login logs in a user
 	Login(username, password string) (string, error)
@@ -18,7 +22,7 @@ func NewUserService(repo *repository.Repo) UserService {
 	return &userService{Repo: repo}
 }
 
-func (s *userService) Register(username, password string) error {
+func (s *userService) Register(c context.Context, email, password string) error {
 	// TODO: implement
 	return nil
 }

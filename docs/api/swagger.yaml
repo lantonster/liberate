@@ -1,0 +1,53 @@
+definitions:
+  github_com_lantonster_liberate_internal_schema.RegisterRequest:
+    properties:
+      email:
+        type: string
+      password:
+        maxLength: 20
+        minLength: 6
+        type: string
+    required:
+    - email
+    - password
+    type: object
+  github_com_lantonster_liberate_internal_schema.RegisterResponse:
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: Liberate API for internal services
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: Liberate API
+  version: "1.0"
+paths:
+  /user/register:
+    post:
+      consumes:
+      - application/json
+      description: Register a new user
+      parameters:
+      - description: Register request
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/github_com_lantonster_liberate_internal_schema.RegisterRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/github_com_lantonster_liberate_internal_schema.RegisterResponse'
+      summary: Register
+      tags:
+      - user
+securityDefinitions:
+  apiKey:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

@@ -17,8 +17,7 @@ type Config struct {
 }
 
 type Server struct {
-	Port int    `mapstructure:"port" default:"8080"`
-	Host string `mapstructure:"host" default:"0.0.0.0"`
+	Port int `mapstructure:"port" default:"8080"`
 }
 
 // LoadConfig loads the configuration from environment variables and config file
