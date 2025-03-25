@@ -9,7 +9,7 @@ package wire
 import (
 	"github.com/google/wire"
 	"github.com/lantonster/liberate/internal/config"
-	"github.com/lantonster/liberate/internal/data"
+	"github.com/lantonster/liberate/internal/database"
 	"github.com/lantonster/liberate/internal/handler"
 	"github.com/lantonster/liberate/internal/repository"
 	"github.com/lantonster/liberate/internal/server"
@@ -20,7 +20,7 @@ import (
 
 func InitializeServer() *server.Server {
 	configConfig := config.LoadConfig()
-	db := data.NewDB(configConfig)
+	db := database.NewDB(configConfig)
 	userRepo := repository.NewUserRepo(db)
 	repo := repository.NewRepo(userRepo)
 	userService := service.NewUserService(repo)

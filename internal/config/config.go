@@ -1,28 +1,24 @@
 package config
 
 import (
-	"fmt"
+	"context"
 
+	"github.com/lantonster/liberate/pkg/color"
+	"github.com/lantonster/liberate/pkg/database"
+	"github.com/lantonster/liberate/pkg/log"
 	"github.com/spf13/viper"
 )
 
 // Config holds the service configuration
 type Config struct {
-	Server Server `mapstructure:"server"`
-	MySQL  MySQL  `mapstructure:"mysql"`
+	Server Server         `mapstructure:"server"`
+	MySQL  database.MySQL `mapstructure:"mysql"`
+	Logger log.Config     `mapstructure:"logger"`
 }
 
 type Server struct {
 	Port int    `mapstructure:"port" default:"8080"`
 	Host string `mapstructure:"host" default:"0.0.0.0"`
-}
-
-type MySQL struct {
-	Host     string `mapstructure:"host" default:"localhost"`
-	Port     int    `mapstructure:"port" default:"3306"`
-	Username string `mapstructure:"username"`
-	Password string `mapstructure:"password"`
-	Database string `mapstructure:"database"`
 }
 
 // LoadConfig loads the configuration from environment variables and config file
@@ -34,12 +30,7 @@ func LoadConfig() *Config {
 	viper.AutomaticEnv()
 
 	if err := viper.ReadInConfig(); err != nil {
-		if _, ok := err.(viper.ConfigFileNotFoundError); !ok {
-			panic(err)
-		}
-		fmt.Println("Using default configuration as config file not found")
-	} else {
-		fmt.Println("Successfully loaded config file:", viper.ConfigFileUsed())
+		panic(err)
 	}
 
 	var cfg Config
@@ -47,7 +38,8 @@ func LoadConfig() *Config {
 		panic(err)
 	}
 
-	fmt.Printf("cfg: %+v\n", cfg)
+	log.SetLogger(cfg.Logger)
+	log.WithContext(context.Background()).Info(color.Green.Sprint("config loaded"))
 
 	return &cfg
 }
