@@ -22,3 +22,23 @@ const (
 	// 重复请求
 	DuplicateRequestError = "base.duplicate_request_error"
 )
+
+var (
+	// 密码长度必须在 6-20 之间
+	PasswordLengthError = "error.password.invalid_length"
+
+	// 密码不能包含特殊字符
+	PasswordSpecialCharacterError = "error.password.special_character"
+
+	// 生成密码哈希失败
+	GeneratePasswordHashFailed = "error.password.generate_hash_failed"
+
+	// 邮箱格式错误
+	EmailInvalid = "error.email.invalid"
+
+	// 邮箱已存在
+	EmailExists = "error.email.exists"
+
+	// 用户不存在
+	UserNotFound = "error.user.not_found"
+)
