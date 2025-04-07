@@ -23,5 +23,13 @@ func RegisterRoutes(r *gin.Engine, service *service.Service, handler *handler.Ha
 	r.GET("/", func(c *gin.Context) { c.JSON(200, gin.H{"message": "Hello, World!"}) })
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
-	r.POST("/users/register", handler.UserHandler.Register)
+	// 用户模块
+	users := r.Group("/users")
+	{
+		// 发送验证码
+		users.POST("/verify-code", handler.UserHandler.SendVerificationCode)
+
+		// 注册
+		users.POST("/register", handler.UserHandler.Register)
+	}
 }

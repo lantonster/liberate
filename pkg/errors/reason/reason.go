@@ -41,4 +41,7 @@ var (
 
 	// 用户不存在
 	UserNotFound = "error.user.not_found"
+
+	// 验证码错误
+	InvalidVerificationCode = "error.verification_code.invalid"
 )

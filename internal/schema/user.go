@@ -8,9 +8,16 @@ import (
 	"github.com/lantonster/liberate/pkg/validator"
 )
 
+type SendVerificationCodeRequest struct {
+	Email string `json:"email" binding:"required"`
+}
+
+type SendVerificationCodeResponse struct{}
+
 type RegisterRequest struct {
 	Email    string `json:"email" binding:"required"`
 	Password string `json:"password" binding:"required"`
+	Code     string `json:"code" binding:"required"`
 }
 
 func (r *RegisterRequest) Check() (errs validator.ValidationErrors, err error) {
@@ -30,6 +37,15 @@ func (r *RegisterRequest) Check() (errs validator.ValidationErrors, err error) {
 			Error: "邮箱格式不正确",
 		})
 		err = errors.BadRequest(reason.EmailInvalid)
+	}
+
+	// 检查验证码
+	if len(r.Code) != 6 {
+		errs = append(errs, &validator.Error{
+			Field: "code",
+			Error: "验证码长度不正确",
+		})
+		err = errors.BadRequest(reason.InvalidVerificationCode)
 	}
 
 	return errs, err
