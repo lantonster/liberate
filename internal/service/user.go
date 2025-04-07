@@ -32,7 +32,7 @@ func (s *userService) CheckEmailExists(c context.Context, email string) (bool, e
 	if err != nil {
 		return false, err
 	}
-	return user != nil, nil
+	return user.Email == email, nil
 }
 
 func (s *userService) Register(c context.Context, email, password string) error {

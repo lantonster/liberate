@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"github.com/lantonster/liberate/internal/model"
-	"github.com/lantonster/liberate/pkg/errors"
 	"github.com/lantonster/liberate/pkg/orm"
 	"gorm.io/gorm"
 )
@@ -14,8 +13,8 @@ type UserRepo interface {
 	// Create 创建用户
 	Create(ctx context.Context, user *model.User) error
 
-	// GetByEmail 根据邮箱查询用户，查询不到返回 nil
-	GetByEmail(ctx context.Context, email string) (*model.User, error)
+	// GetByEmail 根据邮箱查询用户
+	GetByEmail(ctx context.Context, email string) (model.User, error)
 }
 
 // userRepo 实现 UserRepo 接口
@@ -31,13 +30,7 @@ func (r *userRepo) Create(ctx context.Context, user *model.User) error {
 	return r.db.WithContext(ctx).Create(user).Error
 }
 
-func (r *userRepo) GetByEmail(ctx context.Context, email string) (*model.User, error) {
-	var user model.User
-	if err := r.db.WithContext(ctx).Where(orm.Q.User.Email.Eq(email)).First(&user).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-		return nil, err
-	}
-	return &user, nil
+func (r *userRepo) GetByEmail(ctx context.Context, email string) (user model.User, err error) {
+	err = r.db.WithContext(ctx).Where(orm.Q.User.Email.Eq(email)).Find(&user).Error
+	return
 }

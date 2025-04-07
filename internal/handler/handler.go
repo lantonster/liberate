@@ -33,5 +33,5 @@ func BindAndValidate(c *gin.Context, req any) (validator.ValidationErrors, error
 		return fields, err
 	}
 
-	return nil, nil
+	return fields, nil
 }

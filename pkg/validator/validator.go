@@ -131,8 +131,8 @@ func sanitizer(fl validator.FieldLevel) bool {
 		field.SetString(content)
 		return true
 	case reflect.Chan, reflect.Map, reflect.Slice, reflect.Array:
-		// 对于通道、映射、切片和数组，检查长度是否大于 0
-		return field.Len() > 0
+		// 对于通道、映射、切片和数组，直接返回 true，因为这些类型不需要进行 HTML 标签和特殊字符的清理
+		return true
 	case reflect.Ptr, reflect.Interface, reflect.Func:
 		// 对于指针、接口和函数，检查是否不为空
 		return !field.IsNil()
